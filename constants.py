@@ -1,16 +1,16 @@
 
-screenWidth = 800
-screenHeight = 600
+screenWidth = 1920
+screenHeight = 1080
 
 screenSize = (screenWidth, screenHeight)
 
-tileSize = 16
+tileSize = screenWidth / 48
 mapWidth = screenWidth / tileSize
 mapHeight = screenHeight / tileSize
 
-playerPostionX = 12
-playerPostionY = 12
-targetPostionX = mapWidth - 40
-targetPostionY = mapHeight - 10
+playerPostionX = 2
+playerPostionY = 2
+targetPostionX = mapWidth - 8
+targetPostionY = mapHeight - 8
 playerColour = (255,255,255)
 targetColour = (30,190,200)

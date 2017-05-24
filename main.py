@@ -73,13 +73,15 @@ class Game:
             step += 1
 
         step -= 1
-
+        temp = 0
         while step != 1:
             nextTile = [x for x in path if x[2] == step - 1 and ((x[1] == target[1] and abs(x[0] - target[0]) == 1) or (x[0] == target[0] and abs(x[1] - target[1]) == 1))]
             randTile = nextTile[randint(0, len(nextTile) - 1)]
             target = randTile
             self.map[target[0]][target[1]].colour = (200,100,100)
             step -= 1
+            temp += 0
+
 
     def map_create(self):
         new_map = [[Tile(False) for y in range(0,constants.mapHeight)] for x in range(0, constants.mapWidth)]
@@ -91,9 +93,9 @@ class Game:
             new_map[x][constants.mapHeight - 1].block_path = True
             new_map[x][constants.mapHeight - 1].colour = (0,0,0)
 
-        for x in range(1,45):
-            new_map[x][constants.mapHeight -20].block_path = True
-            new_map[x][constants.mapHeight -20].colour = (0,0,0)
+        for x in range(1,30):
+            new_map[x][constants.mapHeight -10].block_path = True
+            new_map[x][constants.mapHeight -10].colour = (0,0,0)
 
         for y in range(0,constants.mapHeight):
             new_map[0][y].block_path = True
