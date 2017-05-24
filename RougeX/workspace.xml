@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="8772f339-35bc-4e69-8ed5-58aef24c9393" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../RougeX/RougeX/workspace.xml" afterPath="$PROJECT_DIR$/../RougeX/RougeX/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../RougeX/main.py" afterPath="$PROJECT_DIR$/../RougeX/main.py" />
     </list>
     <ignored path="untitled4.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -27,11 +26,10 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../RougeX/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.41129032">
-              <caret line="35" column="1" selection-start-line="35" selection-start-column="1" selection-end-line="35" selection-end-column="1" />
+            <state vertical-scroll-proportion="0.7403226">
+              <caret line="47" column="25" selection-start-line="47" selection-start-column="25" selection-end-line="47" selection-end-column="25" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
-                <marker date="1495622576130" expanded="true" signature="876:2713" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -300,7 +298,19 @@
       <option name="project" value="LOCAL" />
       <updated>1495622487396</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="test1">
+      <created>1495622580924</created>
+      <option name="number" value="00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1495622580924</updated>
+    </task>
+    <task id="LOCAL-00004" summary="test1">
+      <created>1495622648242</created>
+      <option name="number" value="00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1495622648242</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -353,7 +363,6 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
-            <marker date="1495622576130" expanded="true" signature="876:2713" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -376,11 +385,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../RougeX/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.41129032">
-          <caret line="35" column="1" selection-start-line="35" selection-start-column="1" selection-end-line="35" selection-end-column="1" />
+        <state vertical-scroll-proportion="0.7403226">
+          <caret line="47" column="25" selection-start-line="47" selection-start-column="25" selection-end-line="47" selection-end-column="25" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
-            <marker date="1495622576130" expanded="true" signature="876:2713" placeholder="..." />
           </folding>
         </state>
       </provider>
