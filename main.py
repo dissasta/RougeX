@@ -33,7 +33,7 @@ class Game:
 
     def on_cleanup(self):
         pygame.quit()
-
+f
     def findPath(self):
         found = False
         step = 0
