@@ -4,28 +4,39 @@ import time
 from random import randint
 
 class Tile:
+    wall = pygame.image.load('Resources/wall.png')
+    floor = pygame.image.load('Resources/floor.png')
     def __init__(self, block_path, posX, posY):
-        self.colours = ((40, 40, 40), (100, 100, 100), (0, 0, 0))
         self.block_path = block_path
-        self.colour = self.colours[2]
         self.uncovered = False
         self.obscuring = False
-        self.sizeX = 40
-        self.sizeY = 40
+        self.sizeX = 64
+        self.sizeY = 64
         self.positionX = posX
         self.positionY = posY
+        #self.image = self.choseTile()
+
+    def choseTile(self):
+        if self.block_path:
+            return Tile.wall
+        else:
+            return Tile.floor
 
     def update(self):
-        if not self.uncovered:
-            self.colour = self.colours[2]
+        if self.block_path:
+            self.image = Tile.wall
         else:
-            if self.block_path:
-                self.colour = self.colours[0]
-            else:
-                self.colour = self.colours[1]
+            self.image = Tile.floor
 
-    def render(self, screen):
-        pygame.draw.rect(screen, self.colour, (self.positionX * self.sizeX, self.positionY * self.sizeY, self.sizeX, self.sizeY))
+    def render(self, screen, layer):
+        if layer == 'MAP':
+            screen.blit(self.image, (self.positionX * self.sizeX, self.positionY * self.sizeY))
+        elif layer == 'COVER':
+            if self.uncovered == 'P':
+                #write some fancy edge smoothing
+                pygame.draw.rect(screen, (0,0,0), (self.positionX * self.sizeX, self.positionY * self.sizeY, self.sizeX, self.sizeY))
+            elif not self.uncovered:
+                pygame.draw.rect(screen, (0,0,0), (self.positionX * self.sizeX, self.positionY * self.sizeY, self.sizeX, self.sizeY))
 
 class Player(Tile):
     def __init__(self, posX, posY):
@@ -33,16 +44,15 @@ class Player(Tile):
         self.colour = (255,255,255)
         self.vision = 5
         self.orientation = None
+        self.image = pygame.image.load('Resources/hero.png')
 
     def update(self, map):
-        count = 1
-        visible = []
-
-        #north
-        while count != self.vision:
-            for y in range(self.vision):
-                for x in range(self.positionX - count, self.positionX + count + 1):
-                    visible.append((x, self.positionY - y))
+        count = 0
+        visible = [(x, self.positionY) for x in range(self.positionX - self.vision, self.positionX + self.vision + 1)]
+        for y in range(self.positionY - self.vision, self.positionY):
+            for x in range(self.positionX - count, self.positionX + count + 1):
+                visible.append((x,y))
+                visible.append((x,y + (self.vision - count) * 2))
             count += 1
 
         for tile in visible:
@@ -53,10 +63,13 @@ class Player(Tile):
 
         print visible
 
+    def render(self, screen):
+        screen.blit(self.image, (self.positionX * self.sizeX, self.positionY * self.sizeY - self.sizeY / 4))
+
 class Monster(Tile):
     def __init__(self, posX, posY):
         Tile.__init__(self, True, posX, posY)
-        self.colour = (136,200,55)
+        self.image = pygame.image.load('Resources/monster.png')
 
     def update(self):
         pass
@@ -107,6 +120,9 @@ class Monster(Tile):
             map[target[0]][target[1]].colour = (200,100,100)
             step -= 1
 
+    def render(self, screen):
+        screen.blit(self.image, (self.positionX * self.sizeX, self.positionY * self.sizeY - self.sizeY / 4))
+
 class Game:
     def __init__(self):
         self.running = True
@@ -120,7 +136,7 @@ class Game:
         self.screen = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
         self.map = self.map_create()
         hero = Player(7, 7)
-        monster = Monster(30, 20)
+        monster = Monster(15, 10)
         self.running = True
 
     def on_event(self, event):
@@ -172,18 +188,20 @@ class Game:
 
     def on_render(self):
 
-        #for x in range(0, constants.mapWidth):
-        #    for y in range(0, constants.mapHeight):
-        #        if self.map[x][y].block_path == False:
-        #            self.map[x][y].colour = (100,100,100)
         #monster.findPath(self.map)
         for x in range(0, constants.mapWidth):
             for y in range(0, constants.mapHeight):
                     self.map[x][y].update()
-                    self.map[x][y].render(self.screen)
+                    self.map[x][y].render(self.screen, 'MAP')
+
         hero.update(self.map)
         hero.render(self.screen)
         monster.render(self.screen)
+
+        for x in range(0, constants.mapWidth):
+            for y in range(0, constants.mapHeight):
+                    self.map[x][y].render(self.screen, 'COVER')
+
         pygame.display.update()
 
     def execute(self):
