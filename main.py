@@ -44,6 +44,7 @@ class Player(Tile):
         self.colour = (255,255,255)
         self.vision = 5
         self.orientation = None
+        self.block_path = False
         self.image = pygame.image.load('Resources/hero.png')
 
     def update(self, map):
@@ -61,7 +62,7 @@ class Player(Tile):
             #if not map[tile[0]][tile[1] - 1].block_path:
             map[tile[0]][tile[1]].uncovered = True
 
-        print visible
+        #print visible
 
     def render(self, screen):
         screen.blit(self.image, (self.positionX * self.sizeX, self.positionY * self.sizeY - self.sizeY / 4))
@@ -76,49 +77,42 @@ class Monster(Tile):
 
     def findPath(self, map):
         found = False
-        step = 0
-        startTile = (self.positionX, self.positionY)
+        startTile = (self.positionX, self.positionY, 0)
         target = (hero.positionX, hero.positionY)
-        toCheck = [startTile]
-        checked = []
-        path = []
+        checked = [startTile]
+        tileCount = 0
 
         while not found:
-            for i in range(len(toCheck)):
-                tile = toCheck.pop(0)
-                northTile = (tile[0], tile[1] - 1)
-                southTile = (tile[0], tile[1] + 1)
-                westTile = (tile[0] - 1, tile[1])
-                eastTile = (tile[0] + 1, tile[1])
+            toCheck = [(checked[tileCount][0], checked[tileCount][1] - 1, checked[tileCount][2] + 1),
+                       (checked[tileCount][0], checked[tileCount][1] + 1, checked[tileCount][2] + 1),
+                       (checked[tileCount][0] - 1, checked[tileCount][1], checked[tileCount][2] + 1),
+                       (checked[tileCount][0] + 1, checked[tileCount][1], checked[tileCount][2] + 1)]
 
-                if not map[tile[0]-1][tile[1]].block_path and westTile not in checked and westTile not in toCheck:
-                    toCheck.append(westTile)
+            for tile in range(len(toCheck)):
+                if map[toCheck[tile][0]][toCheck[tile][1]].block_path:
+                    pass
 
-                if not map[tile[0]+1][tile[1]].block_path and eastTile not in checked and eastTile not in toCheck:
-                    toCheck.append(eastTile)
+                else:
+                    dupe = False
+                    for i in xrange(toCheck[tile][2] + 1):
+                        if (toCheck[tile][0], toCheck[tile][1], i) in checked:
+                            dupe = True
+                            break
 
-                if not map[tile[0]][tile[1]-1].block_path and northTile not in checked and northTile not in toCheck:
-                    toCheck.append(northTile)
+                    if not dupe:
+                        checked.append(toCheck[tile])
 
-                if not map[tile[0]][tile[1]+1].block_path and southTile not in checked and southTile not in toCheck:
-                    toCheck.append(southTile)
-
-                checked.append(tile)
-                path.append((tile[0], tile[1], step))
-
-                if hero.positionX == tile[0] and hero.positionY == tile[1]:
+                if hero.positionX == toCheck[tile][0] and hero.positionY == toCheck[tile][1]:
                     found = True
+                    steps = toCheck[tile][2]
                     break
+            tileCount += 1
 
-            step += 1
-
-        step -= 1
-        while step != 1:
-            nextTile = [x for x in path if x[2] == step - 1 and ((x[1] == target[1] and abs(x[0] - target[0]) == 1) or (x[0] == target[0] and abs(x[1] - target[1]) == 1))]
+        while steps != 0:
+            nextTile = [x for x in checked if x[2] == steps - 1 and ((x[1] == target[1] and abs(x[0] - target[0]) == 1) or (x[0] == target[0] and abs(x[1] - target[1]) == 1))]
             randTile = nextTile[randint(0, len(nextTile) - 1)]
             target = randTile
-            map[target[0]][target[1]].colour = (200,100,100)
-            step -= 1
+            steps -= 1
 
     def render(self, screen):
         screen.blit(self.image, (self.positionX * self.sizeX, self.positionY * self.sizeY - self.sizeY / 4))
@@ -135,7 +129,7 @@ class Game:
         pygame.init()
         self.screen = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
         self.map = self.map_create()
-        hero = Player(7, 7)
+        hero = Player(2, 2)
         monster = Monster(15, 10)
         self.running = True
 
@@ -188,7 +182,6 @@ class Game:
 
     def on_render(self):
 
-        #monster.findPath(self.map)
         for x in range(0, constants.mapWidth):
             for y in range(0, constants.mapHeight):
                     self.map[x][y].update()
@@ -200,7 +193,7 @@ class Game:
 
         for x in range(0, constants.mapWidth):
             for y in range(0, constants.mapHeight):
-                    self.map[x][y].render(self.screen, 'COVER')
+                self.map[x][y].render(self.screen, 'COVER')
 
         pygame.display.update()
 
