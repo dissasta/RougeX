@@ -216,3 +216,4 @@ class Game:
 if __name__ == "__main__":
     theGame = Game()
     theGame.execute()
+    print('elo')
